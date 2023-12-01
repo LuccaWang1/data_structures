@@ -65,7 +65,7 @@ def get_villagers_by_species(filename, search_string="All"):
             
     return sorted(villagers)
 
-print(get_villagers_by_species('villagers.csv', "Bear"))
+print(get_villagers_by_species('villagers.csv', 'Bear'))
 
 
 def all_names_by_hobby(filename):
@@ -78,12 +78,12 @@ def all_names_by_hobby(filename):
         - list[list[str]]: a list of lists containing names
     """
 
-    Villagers_Fitness = []
-    Villagers_Nature = []
-    Villagers_Education = []
-    Villagers_Music = []
-    Villagers_Fashion = []
-    Villagers_Play = []
+    villagers_fitness = []
+    villagers_nature = []
+    villagers_education = []
+    villagers_music = []
+    villagers_fashion = []
+    villagers_play = []
 
     data = open(filename)
 
@@ -94,61 +94,72 @@ def all_names_by_hobby(filename):
     # if, elif, and else statements here 
     # then append the name to that hobby list 
 
-    Villagers_Fitness.insert(0, "Fitness: ")
-    Villagers_Nature.insert(0, "Nature: ")
-    Villagers_Education.insert(0, "Education: ")
-    Villagers_Music.insert(0, "Music: ")
-    Villagers_Fashion.insert(0, "Fashion: ")
-    Villagers_Play.insert(0, "Play: ")
-
     for line in data: 
         hobby = line.rstrip().split("|")[3]
         name = line.rstrip().split("|")[0]
         
         if hobby == 'Fitness':
-            Villagers_Fitness.append(name)
+            villagers_fitness.append(name)
     
         elif hobby == 'Nature':
-            Villagers_Nature.append(name)
+            villagers_nature.append(name)
     
         elif hobby == 'Education':
-            Villagers_Education.append(name)
+            villagers_education.append(name)
             
         elif hobby == 'Music':
-            Villagers_Music.append(name)
+            villagers_music.append(name)
             
         elif hobby == 'Fashion':
-            Villagers_Fashion.append(name)
+            villagers_fashion.append(name)
             
         elif hobby == 'Play':
-            Villagers_Play.append(name)
+            villagers_play.append(name)
 
-    All_Villagers = [Villagers_Fitness, Villagers_Nature, Villagers_Education, Villagers_Music, Villagers_Fashion, Villagers_Play]
+    villagers_fitness = sorted(villagers_fitness)
+    villagers_nature = sorted(villagers_nature)
+    villagers_education = sorted(villagers_education)
+    villagers_music = sorted(villagers_music)
+    villagers_fashion = sorted(villagers_fashion)
+    villagers_play = sorted(villagers_play)
+
+    all_villagers = [villagers_fitness, villagers_nature, villagers_education, villagers_music, villagers_fashion, villagers_play]
                  
-    return sorted([All_Villagers])
+    return all_villagers
+    
 
 print(all_names_by_hobby('villagers.csv'))
 
 
-# def all_data(filename):
-#     """Return all the data in a file.
+def all_data(filename):
+    """Return all the data in a file.
 
-#     Each line in the file is a tuple of (name, species, personality, hobby,
-#     saying).
+    Each line in the file is a tuple of (name, species, personality, hobby,
+    saying).
+    Arguments:
+        - filename (str): the path to a data file
+    Return:
+        - list[tuple[str]]: a list of tuples containing strings
+    """   
 
-#     Arguments:
-#         - filename (str): the path to a data file
+    all_villagers_info = []
+    
+    data = open(filename)
+    
+    villagers_tup = ()
 
-#     Return:
-#         - list[tuple[str]]: a list of tuples containing strings
-#     """
+    for line in data:
+        name = line.rstrip().split('|')[0]
+        species = line.rstrip().split('|')[1]
+        personality = line.rstrip().split('|')[2]
+        hobby = line.rstrip().split('|')[3] 
+        motto = line.rstrip().split('|')[4] 
+        
+        all_villagers_info.append(tuple([name, species, personality, hobby, motto]))
+        
+    return all_villagers_info
 
-#     all_data = []
-
-#     # TODO: replace this with your code
-
-#     return all_data
-
+print(all_data('villagers.csv'))
 
 # def find_motto(filename, villager_name):
 #     """Return the villager's motto.
@@ -164,7 +175,27 @@ print(all_names_by_hobby('villagers.csv'))
 #         - str: the villager's motto or None
 #     """
 
-#     # TODO: replace this with your code
+#     data = open(filename)
+
+#     villager_name = print(input("Whose motto would you like to know? Please enter their name now: "))
+
+#     if villager_name <= " " or villager_name.isdigit():
+#         villager_name = print(input("Please try again: Enter the name of the villager whose motto you'd like to know: "))
+    
+#     for line in data:
+#             villager_name = line.rstrip().split("|")[0]
+#             motto = line.rstrip().split("|")[-1]
+
+#             #might need to put i ... ? 
+#             for villager_name, motto in data:
+#                 print(f'Index is {idx} and data is {elem}')
+
+#             if villager == line.rstrip().split("|")[0] and motto > " ":
+#                 return motto
+#             else:
+#                 return None
+
+# find_motto('villagers.csv', 'Nate')
 
 
 # def find_likeminded_villagers(filename, villager_name):
