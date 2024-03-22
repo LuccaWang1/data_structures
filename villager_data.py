@@ -48,24 +48,13 @@ def get_villagers_by_species(filename, search_string="All"):
 
     data = open(filename)
 
-    # we need to have a condition to get all the villagers based on species 
-    # stripping and spliting 
-    # append the list of names of the villagers to "villagers" 
+    for line in data:
+        name, species = line.rstrip().split("|")[:2]
 
-    if search_string == "All":
-        for line in data: 
-            name = line.rstrip().split("|")[0]
+        if search_string in ("All", species):
             villagers.append(name)
-    else: 
-        for line in data: 
-            name = line.rstrip().split("|")[0]
-            species = line.rstrip().split("|")[1]
-            if species == search_string:
-                villagers.append(name)
-            
-    return sorted(villagers)
 
-print(get_villagers_by_species('villagers.csv', 'Bear'))
+    return sorted(villagers)
 
 
 def all_names_by_hobby(filename):
@@ -115,20 +104,14 @@ def all_names_by_hobby(filename):
             
         elif hobby == 'Play':
             villagers_play.append(name)
-
-    villagers_fitness = sorted(villagers_fitness)
-    villagers_nature = sorted(villagers_nature)
-    villagers_education = sorted(villagers_education)
-    villagers_music = sorted(villagers_music)
-    villagers_fashion = sorted(villagers_fashion)
-    villagers_play = sorted(villagers_play)
-
-    all_villagers = [villagers_fitness, villagers_nature, villagers_education, villagers_music, villagers_fashion, villagers_play]
                  
-    return all_villagers
-    
-
-print(all_names_by_hobby('villagers.csv'))
+    return [sorted(villagers_fitness),
+            sorted(villagers_nature),
+            sorted(villagers_education),
+            sorted(villagers_music),
+            sorted(villagers_fashion),
+            sorted(villagers_play)
+    ]
 
 
 def all_data(filename):
@@ -145,8 +128,6 @@ def all_data(filename):
     all_villagers_info = []
     
     data = open(filename)
-    
-    villagers_tup = ()
 
     for line in data:
         name = line.rstrip().split('|')[0]
@@ -159,58 +140,60 @@ def all_data(filename):
         
     return all_villagers_info
 
-print(all_data('villagers.csv'))
 
-# def find_motto(filename, villager_name):
-#     """Return the villager's motto.
+def find_motto(filename, villager_name):
+    """Return the villager's motto.
 
-#     Return None if you're not able to find a villager with the
-#     given name.
+    Return None if you're not able to find a villager with the
+    given name.
 
-#     Arguments:
-#         - filename (str): the path to a data file
-#         - villager_name (str): a villager's name
+    Arguments:
+        - filename (str): the path to a data file
+        - villager_name (str): a villager's name
 
-#     Return:
-#         - str: the villager's motto or None
-#     """
+    Return:
+        - str: the villager's motto or None
+    """
 
-#     data = open(filename)
-
-#     villager_name = print(input("Whose motto would you like to know? Please enter their name now: "))
-
-#     if villager_name <= " " or villager_name.isdigit():
-#         villager_name = print(input("Please try again: Enter the name of the villager whose motto you'd like to know: "))
+    data = open(filename)
     
-#     for line in data:
-#             villager_name = line.rstrip().split("|")[0]
-#             motto = line.rstrip().split("|")[-1]
+    for line in data:
+            name = line.rstrip().split("|")[0]
+            motto = line.rstrip().split("|")[4]
 
-#             #might need to put i ... ? 
-#             for villager_name, motto in data:
-#                 print(f'Index is {idx} and data is {elem}')
-
-#             if villager == line.rstrip().split("|")[0] and motto > " ":
-#                 return motto
-#             else:
-#                 return None
-
-# find_motto('villagers.csv', 'Nate')
+            if villager_name == name:
+                return motto
 
 
-# def find_likeminded_villagers(filename, villager_name):
-#     """Return a set of villagers with the same personality as the given villager.
+def find_likeminded_villagers(filename, villager_name):
+    """Return a set of villagers with the same personality as the given villager.
 
-#     Arguments:
-#         - filename (str): the path to a data file
-#         - villager_name (str): a villager's name
+    Arguments:
+        - filename (str): the path to a data file
+        - villager_name (str): a villager's name
     
-#     Return:
-#         - set[str]: a set of names
+    Return:
+        - set[str]: a set of names
 
-#     For example:
-#         >>> find_likeminded_villagers('villagers.csv', 'Wendy')
-#         {'Bella', ..., 'Carmen'}
-#     """
+    For example:
+        >>> find_likeminded_villagers('villagers.csv', 'Wendy')
+        {'Bella', ..., 'Carmen'}
+    """
 
-#     # TODO: replace this with your code
+    likeminded = set()
+
+    target_personality = None
+    for villager_data in all_data(filename):
+        name, _, personality = villager_data[:3]
+
+        if name == villager_name:
+            target_personality = personality
+            break
+
+    if target_personality:
+        for villager_data in all_data(filename):
+            name, _, personality = villager_data[:3]
+            if personality == target_personality:
+                likeminded.add(name)
+
+    return likeminded
